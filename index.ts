@@ -1,2 +1,2 @@
 export {CQRSModule} from "./src/CQRS.module";
-export {CQRSService} from "./src/CQRS.service";
+export {CQRSService, CQRSServiceConfig} from "./src/CQRS.service";

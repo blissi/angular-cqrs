@@ -1,6 +1,6 @@
-import { NgModule }     from '@angular/core';
+import {ModuleWithProviders, NgModule} from "@angular/core";
 import { CommonModule } from '@angular/common';
-import {CQRSService} from "./CQRS.service";
+import {CQRSService, CQRSServiceConfig} from "./CQRS.service";
 
 @NgModule({
 	imports: [CommonModule],
@@ -9,4 +9,16 @@ import {CQRSService} from "./CQRS.service";
 	]
 })
 export class CQRSModule {
+	
+	public static forRoot(config: CQRSServiceConfig): ModuleWithProviders {
+		return {
+			ngModule: CQRSModule,
+			providers: [
+				{
+					provide: CQRSService,
+					useValue: config
+				}
+			]
+		}
+	}
 }

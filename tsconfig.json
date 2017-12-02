@@ -9,7 +9,7 @@
       "dom"
     ],
     "mapRoot": "./",
-    "module": "es2015",
+    "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
     "target": "es5",
@@ -17,9 +17,14 @@
       "@angular/core": ["node_modules/@angular/core"]
     },
     "noImplicitAny": true,
-    "strictNullChecks": true,
+    "strictNullChecks": false,
     "stripInternal": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": [
+      "mocha",
+      "chai",
+      "sinon"
+    ]
   },
   "compileOnSave": true,
   "exclude": [

@@ -21,10 +21,20 @@
   },
   "homepage": "https://github.com/blissi/angular-cqrs#readme",
   "devDependencies": {
-    "@angular/cli": "^1.5.5"
+    "@angular/cli": "^1.5.5",
+    "@types/chai": "^4.0.6",
+    "@types/dottie": "^2.0.2",
+    "@types/mocha": "^2.2.44",
+    "@types/sinon": "^4.0.0",
+    "@types/uuid": "^3.4.3",
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "sinon": "^4.1.2"
   },
   "dependencies": {
     "@angular/common": "^5.0.5",
-    "@angular/core": "^5.0.5"
+    "@angular/core": "^5.0.5",
+    "dottie": "^2.0.0",
+    "uuid": "^3.1.0"
   }
 }
