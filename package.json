@@ -1,0 +1,30 @@
+{
+  "name": "angular-cqrs",
+  "version": "1.0.0",
+  "description": "Provides CQRS functionality for Angular 2/4.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blissi/angular-cqrs.git"
+  },
+  "keywords": [
+    "Angular",
+    "CQRS"
+  ],
+  "author": "Steven Weiß",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blissi/angular-cqrs/issues"
+  },
+  "homepage": "https://github.com/blissi/angular-cqrs#readme",
+  "devDependencies": {
+    "@angular/cli": "^1.5.5"
+  },
+  "dependencies": {
+    "@angular/common": "^5.0.5",
+    "@angular/core": "^5.0.5"
+  }
+}
