@@ -1,6 +1,6 @@
 {
   "name": "angular-cqrs",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Provides CQRS functionality for Angular 2/4.",
   "main": "index.js",
   "scripts": {
