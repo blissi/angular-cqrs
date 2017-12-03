@@ -13,16 +13,16 @@ describe("CQRSService", function () {
 	});
 
 	it("calls the command sender.", () => {
-		const sentCommands: any[] = [];
-		sut.onCommand(cmd => sentCommands.push(cmd));
+		const sender = sinon.spy();
+		sut.onCommand(sender);
 		
 		let cmd = {
 			command: "cmd1"
 		};
 		sut.sendCommand(cmd);
 		
-		expect(sentCommands).to.have.lengthOf(1);
-		expect(sentCommands[0]).to.eql(cmd);
+		expect(sender.calledOnce).to.be.true;
+		expect(sender.args[0]).to.eql([cmd]);
 	});
 	
 	describe("command callbacks", function () {
@@ -32,48 +32,60 @@ describe("CQRSService", function () {
 			command: "cmd1"
 		};
 		
+		const matchingEvent = {
+			commandId: cmd.id,
+			payload: {
+				data: "response"
+			}
+		};
+		
 		let commandCallback: sinon.SinonSpy;
 		
 		beforeEach(() => {
 			commandCallback = sinon.spy();
-			
-			sut.onCommand(cmd => sut.eventReceived({
-				commandId: cmd.id,
-				payload: {
-					data: "response"
-				}
-			}));
 		});
 		
 		it("calls the command callback when the corresponding event for a command has been received.", () => {
 			sut.sendCommand(cmd, commandCallback);
 			
+			sut.eventReceived(matchingEvent);
+			
 			expect(commandCallback.calledOnce).to.be.true;
-			expect(commandCallback.args[0]).to.eql([{
+			expect(commandCallback.args[0][0]).to.eql({
 				commandId: cmd.id,
 				payload: {
 					data: "response"
 				}
-			}]);
+			});
 		});
 		
-		it("removes the command callback immediately when the event for a command has been received.", () => {
+		it("calls the command callback multiple times when done() is not called by the command handler.", () => {
 			sut.sendCommand(cmd, commandCallback);
-			sut.eventReceived({
-				commandId: cmd.id
-			});
+
+			sut.eventReceived(matchingEvent);
+			sut.eventReceived(matchingEvent);
+			sut.eventReceived(matchingEvent);
+			
+			expect(commandCallback.calledThrice).to.be.true;
+		});
+		
+		it("doesn't call the command callback any further if the done()-function was called and therefore the command is marked as handled.", () => {
+			sut.sendCommand(cmd, commandCallback);
+			sut.eventReceived(matchingEvent);
+			expect(commandCallback.calledOnce).to.be.true;
+			
+			const done = commandCallback.args[0][1];
+			done();
+			
+			sut.eventReceived(matchingEvent);
 			
 			expect(commandCallback.calledOnce).to.be.true;
 		});
 		
 		it("removes all command callbacks when ngOnDestroy is called", () => {
-			sut.onCommand(cmd => {});
-			
 			sut.sendCommand(cmd, commandCallback);
 			sut.ngOnDestroy();
-			sut.eventReceived({
-				commandId: cmd.id
-			});
+			sut.eventReceived(matchingEvent);
 			
 			expect(commandCallback.notCalled).to.be.true;
 		});

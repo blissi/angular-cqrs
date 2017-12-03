@@ -31,7 +31,7 @@ export interface CQRSServiceConfig {
 
 
 export type CommandSender = (cmd: any) => void;
-export type EventHandler = (evt: any) => void;
+export type EventHandler = (evt: any, done: () => void) => void;
 
 
 @Injectable()
@@ -70,8 +70,13 @@ export class CQRSService implements OnDestroy {
 		const commandId = dottie.get(evt, this.config.eventDefinition.commandId, null);
 		if (commandId && this.cmdCallbacks[commandId]) {
 			const listener: EventHandler = this.cmdCallbacks[commandId];
-			delete this.cmdCallbacks[commandId];
-			listener(evt);
+			
+			// done removes the command callback.
+			const done = () => {
+				delete this.cmdCallbacks[commandId];
+			};
+			
+			listener(evt, done);
 		}
 	}
 	
@@ -80,7 +85,9 @@ export class CQRSService implements OnDestroy {
 	 * Sends a command using the function registered by onCommand.
 	 *
 	 * @param {object} cmd The command object to send to the backend
-	 * @param {function} listener A optional callback function that is invoked once, as soon as the correspondant event returns from the server.
+	 * @param {function} listener An optional callback function that is invoked as soon as the correspondant event returns from the server.
+	 * The signature of this listener is (evt: any, done: () => void) => void. You must call done() if this is the only event and
+	 * you are not interested in further events that belong to this command.
 	 */
 	public sendCommand(cmd: any, listener?: EventHandler): void {
 		const id = this.fillCommandIdIfNotPresent(cmd);
