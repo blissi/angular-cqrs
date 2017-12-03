@@ -90,4 +90,37 @@ describe("CQRSService", function () {
 			expect(commandCallback.notCalled).to.be.true;
 		});
 	});
+	
+	describe("event handlers", function () {
+		const event = {
+			payload: {
+				data: "response"
+			}
+		};
+		
+		it("invokes the $events observable when an event is received.", () => {
+			const eventHandler = sinon.spy();
+			sut.$events.subscribe(eventHandler);
+			
+			sut.eventReceived(event);
+			sut.eventReceived(event);
+			sut.eventReceived(event);
+			
+			expect(eventHandler.calledThrice).to.be.true;
+			expect(eventHandler.args[0]).to.eql([event]);
+		});
+		
+		it("completes the $events observable when ngOnDestroy() is called.", () => {
+			const eventHandler = sinon.spy();
+			const completeHandler = sinon.spy();
+			sut.$events.subscribe(eventHandler, undefined, completeHandler);
+			
+			sut.ngOnDestroy();
+			
+			sut.eventReceived(event);
+			
+			expect(eventHandler.notCalled).to.be.true;
+			expect(completeHandler.calledOnce).to.be.true;
+		});
+	});
 });

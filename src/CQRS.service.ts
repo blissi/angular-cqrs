@@ -1,6 +1,8 @@
 import {Injectable, OnDestroy, Optional} from "@angular/core";
 import * as dottie from "dottie";
 import * as uuid from "uuid/v4";
+import {Observable} from "rxjs/Observable";
+import {Subject} from "rxjs/Subject";
 
 
 export interface CQRSServiceConfig {
@@ -31,7 +33,7 @@ export interface CQRSServiceConfig {
 
 
 export type CommandSender = (cmd: any) => void;
-export type EventHandler = (evt: any, done: () => void) => void;
+export type CommandCallback = (evt: any, done: () => void) => void;
 
 
 @Injectable()
@@ -39,6 +41,7 @@ export class CQRSService implements OnDestroy {
 	private config: CQRSServiceConfig;
 	private cmdHandler: CommandSender | undefined;
 	private cmdCallbacks: any = {};
+	private readonly _$events = new Subject<any>();
 	
 	public constructor(@Optional() config: CQRSServiceConfig) {
 		this.config = config || {};
@@ -55,10 +58,10 @@ export class CQRSService implements OnDestroy {
 	public ngOnDestroy(): void {
 		this.cmdCallbacks = {};
 		this.cmdHandler = undefined;
+		this._$events.complete();
 	}
 	
 	/**
-	 * @description
 	 * Used to call Angular CQRS from your application, i.e. if a specific websocket message arrived.
 	 *
 	 * @param {object} evt The received event
@@ -69,7 +72,7 @@ export class CQRSService implements OnDestroy {
 		
 		const commandId = dottie.get(evt, this.config.eventDefinition.commandId, null);
 		if (commandId && this.cmdCallbacks[commandId]) {
-			const listener: EventHandler = this.cmdCallbacks[commandId];
+			const listener: CommandCallback = this.cmdCallbacks[commandId];
 			
 			// done removes the command callback.
 			const done = () => {
@@ -78,10 +81,18 @@ export class CQRSService implements OnDestroy {
 			
 			listener(evt, done);
 		}
+		
+		this._$events.next(evt);
 	}
 	
 	/**
-	 * @description
+	 * This observable is invoked for every event that is received.
+	 */
+	public get $events(): Observable<any> {
+	    return this._$events.asObservable();
+	}
+	
+	/**
 	 * Sends a command using the function registered by onCommand.
 	 *
 	 * @param {object} cmd The command object to send to the backend
@@ -89,7 +100,7 @@ export class CQRSService implements OnDestroy {
 	 * The signature of this listener is (evt: any, done: () => void) => void. You must call done() if this is the only event and
 	 * you are not interested in further events that belong to this command.
 	 */
-	public sendCommand(cmd: any, listener?: EventHandler): void {
+	public sendCommand(cmd: any, listener?: CommandCallback): void {
 		const id = this.fillCommandIdIfNotPresent(cmd);
 		
 		if (listener) {
