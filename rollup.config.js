@@ -6,6 +6,7 @@ export default {
 	moduleName: "angular.cqrs",
 	globals: {
 		"@angular/core": "ng.core",
+		"@angular/common": "ng.common",
 		"rxjs/Observable": "Rx",
 		"rxjs/Subject": "Rx"
 	}
