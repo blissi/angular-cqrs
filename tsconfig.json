@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": "",
+    "outDir": "dist",
     "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -14,7 +15,8 @@
     "sourceMap": true,
     "target": "es5",
     "paths": {
-      "@angular/core": ["node_modules/@angular/core"]
+      "@angular/core": ["node_modules/@angular/core"],
+      "rxjs/*": ["node_modules/rxjs/*"]
     },
     "noImplicitAny": true,
     "strictNullChecks": false,
