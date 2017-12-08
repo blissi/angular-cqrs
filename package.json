@@ -4,10 +4,11 @@
   "description": "Provides CQRS functionality for Angular 2/4.",
   "main": "index.js",
   "scripts": {
+    "clean": "rimraf dist",
     "transpile": "ngc",
-    "package": "rollup -c",
+    "package": "rollup -c && copy package.dist.json dist\\package.json",
     "minify": "uglifyjs dist/bundles/angular-cqrs.umd.js --screw-ie8 --compress --mangle --comments --output dist/bundles/angular-cqrs.umd.min.js",
-    "build": "npm run transpile && npm run package && npm run minify",
+    "build": "npm run clean && npm run transpile && npm run package && npm run minify",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -40,7 +41,9 @@
     "@types/sinon": "^4.0.0",
     "@types/uuid": "^3.4.3",
     "chai": "^4.1.2",
+    "copy": "^0.3.1",
     "mocha": "^4.0.1",
+    "rimraf": "^2.6.2",
     "rollup": "^0.52.1",
     "sinon": "^4.1.2",
     "typescript": "^2.6.2",
