@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "transpile": "ngc",
-    "package": "rollup -c && copy package.dist.json dist\\package.json",
+    "package": "rollup -c && copy package.dist.json dist\\package.json && copy README.md dist",
     "minify": "uglifyjs dist/bundles/angular-cqrs.umd.js --screw-ie8 --compress --mangle --comments --output dist/bundles/angular-cqrs.umd.min.js",
     "build": "npm run clean && npm run transpile && npm run package && npm run minify",
     "test": "ng test"
