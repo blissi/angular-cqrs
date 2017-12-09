@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "",
     "outDir": "dist",
-    "declaration": true,
+    "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": [
@@ -28,11 +28,11 @@
       "sinon"
     ]
   },
-  "compileOnSave": true,
   "exclude": [
     "test.ts",
     "**/*.spec.ts"
   ],
+  "compileOnSave": true,
   "angularCompilerOptions": {
     "strictMetadataEmit": true
   }

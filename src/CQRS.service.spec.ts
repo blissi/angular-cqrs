@@ -1,6 +1,8 @@
-import {CQRSService} from "../src/CQRS.service";
+import {CQRSService} from "./CQRS.service";
 import {expect} from "chai";
 import * as sinon from "sinon";
+
+declare let Zone: any;
 
 
 describe("CQRSService", function () {

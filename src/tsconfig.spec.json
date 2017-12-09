@@ -1,0 +1,23 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/spec",
+    "baseUrl": "./",
+    "module": "commonjs",
+    "target": "es5",
+    "types": [
+      "mocha",
+      "chai",
+      "node"
+    ]
+  },
+  "files": [
+    "test.ts"
+  ],
+  "exclude": [
+  ],
+  "include": [
+    "**/*.spec.ts",
+    "**/*.d.ts"
+  ]
+}
