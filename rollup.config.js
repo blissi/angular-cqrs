@@ -1,9 +1,11 @@
 export default {
-	entry: "dist/index.js",
-	dest: "dist/bundles/angular-cqrs.umd.js",
-	sourceMap: false,
-	format: "umd",
-	moduleName: "angular.cqrs",
+	input: "dist/index.js",
+	output: {
+		file: "dist/bundles/angular-cqrs.umd.js",
+		sourcemap: false,
+		format: "umd",
+		name: "angular.cqrs"
+	},
 	globals: {
 		"@angular/core": "ng.core",
 		"@angular/common": "ng.common",
