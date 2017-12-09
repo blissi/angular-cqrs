@@ -1,4 +1,4 @@
-import {Injectable, OnDestroy, Optional} from "@angular/core";
+import {Inject, Injectable, InjectionToken, OnDestroy, Optional} from "@angular/core";
 import * as dottie from "dottie";
 import * as uuid from "uuid/v4";
 import {Observable} from "rxjs/Observable";
@@ -32,6 +32,9 @@ export interface CQRSServiceConfig {
 }
 
 
+export const CQRS_CONFIG = new InjectionToken("CQRS_CONFIG");
+
+
 export type CommandSender = (cmd: any) => void;
 export type CommandCallback = (evt: any, done: () => void) => void;
 
@@ -43,7 +46,7 @@ export class CQRSService implements OnDestroy {
 	private cmdCallbacks: any = {};
 	private readonly _$events = new Subject<any>();
 	
-	public constructor(@Optional() config: CQRSServiceConfig) {
+	public constructor(@Optional() @Inject(CQRS_CONFIG) config: CQRSServiceConfig) {
 		this.config = config || {};
 		
 		this.config.eventDefinition = this.config.eventDefinition || {};

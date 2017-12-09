@@ -1,11 +1,13 @@
 import {ModuleWithProviders, NgModule, Optional, SkipSelf} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {CQRSService, CQRSServiceConfig} from "./CQRS.service";
+import {CQRS_CONFIG, CQRSService, CQRSServiceConfig} from "./CQRS.service";
 
 
 @NgModule({
 	imports: [CommonModule],
-	providers: []
+	providers: [
+		CQRSService
+	]
 })
 export class CQRSModule {
 	
@@ -20,7 +22,7 @@ export class CQRSModule {
 			ngModule: CQRSModule,
 			providers: [
 				{
-					provide: CQRSService,
+					provide: CQRS_CONFIG,
 					useValue: config
 				}
 			]
